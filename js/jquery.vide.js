@@ -38,12 +38,12 @@
     muted: true,
     loop: true,
     autoplay: true,
-    playlistinline: true,
+    playsinline: true,
     position: '50% 50%',
     posterType: 'detect',
     resizing: true,
     bgColor: 'transparent',
-    className: '',
+    className: ''
   };
 
   /**
@@ -172,7 +172,26 @@
     var onLoad = function() {
       callback(this.src);
     };
+    $('<img src="' + path + '.gif">').on('load', onLoad);
+        $('<img src="' + path + '.jpg">').on('load', onLoad);
+        $('<img src="' + path + '.jpeg">').on('load', onLoad);
+        $('<img src="' + path + '.png">').on('load', onLoad);
+      }
 
+      /**
+       * Check if video is playing
+       * @private
+       * @param {Object} $video
+       * @param {Boolean} shouldAutoPlay
+       */
+      function checkIfVideoIsPlaying($video, shouldAutoPlay) {
+        var video = $video.get(0);
+
+        if (shouldAutoPlay) {
+          return !!(video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2);
+        }
+
+        return false;
   }
 
   /**
@@ -301,9 +320,9 @@
         sources += '<source src="' + path.ogv + '.ogv" type="video/ogg">';
       }
 
-      $video = vide.$video = $('<video controls playsinline>' + sources + '</video>');
+      $video = vide.$video = $('<video>' + sources + '</video>');
     } else {
-      $video = vide.$video = $('<video controls playsinline>' +
+      $video = vide.$video = $('<video>' +
         '<source src="' + path + '.mp4" type="video/mp4">' +
         '<source src="' + path + '.webm" type="video/webm">' +
         '<source src="' + path + '.ogv" type="video/ogg">' +
@@ -323,8 +342,10 @@
           defaultMuted: settings.muted,
           playbackRate: settings.playbackRate,
           defaultPlaybackRate: settings.playbackRate,
-          playsinline: settings.playlistinline
         });
+        if (settings.playsinline) {
+          $video.attr('playsinline', '');
+        }
     } catch (e) {
       throw new Error(NOT_IMPLEMENTED_MSG);
     }
@@ -370,6 +391,14 @@
 
     // Append a video
     $wrapper.append($video);
+    setTimeout(function() {
+      if (!checkIfVideoIsPlaying($video, settings.autoplay)) {
+        $video.css({
+          visibility: 'hidden',
+          opacity: 0
+        });
+      }
+    }, 100);
   };
 
   /**
