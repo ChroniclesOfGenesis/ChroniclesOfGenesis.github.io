@@ -321,7 +321,8 @@
           muted: settings.muted,
           defaultMuted: settings.muted,
           playbackRate: settings.playbackRate,
-          defaultPlaybackRate: settings.playbackRate
+          defaultPlaybackRate: settings.playbackRate,
+		  controls: true
         });
     } catch (e) {
       throw new Error(NOT_IMPLEMENTED_MSG);
