@@ -38,11 +38,12 @@
     muted: true,
     loop: true,
     autoplay: true,
+    playlistinline: true,
     position: '50% 50%',
     posterType: 'detect',
     resizing: true,
     bgColor: 'transparent',
-    className: ''
+    className: '',
   };
 
   /**
@@ -300,9 +301,9 @@
         sources += '<source src="' + path.ogv + '.ogv" type="video/ogg">';
       }
 
-      $video = vide.$video = $('<video>' + sources + '</video>');
+      $video = vide.$video = $('<video controls playsinline>' + sources + '</video>');
     } else {
-      $video = vide.$video = $('<video>' +
+      $video = vide.$video = $('<video controls playsinline>' +
         '<source src="' + path + '.mp4" type="video/mp4">' +
         '<source src="' + path + '.webm" type="video/webm">' +
         '<source src="' + path + '.ogv" type="video/ogg">' +
@@ -322,7 +323,7 @@
           defaultMuted: settings.muted,
           playbackRate: settings.playbackRate,
           defaultPlaybackRate: settings.playbackRate,
-		  controls: true
+          playsinline: settings.playlistinline
         });
     } catch (e) {
       throw new Error(NOT_IMPLEMENTED_MSG);
